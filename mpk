@@ -1,0 +1,33 @@
+n,m=map(int,input("请输入物品的种类和约束条件：").split())#同时输入多个数
+ls=list(map(float,input("输入每个物品的价值：").split()))
+x=[]#设计二维数组存储列表数据
+for i in range(m):#生成m个约束条件
+    print("请输入第%d约束："%i,end='')
+    ls1=list(map(float,input().split()))#输入n个物品
+    x.append(ls1)
+lst2=list(map(float,input("输入每个约束条件的总值：").split()))#存放每个约束的总值
+def f(i):#物品的层数
+    s=1
+    global max_1,v
+    if i>n-1:
+        if v>max_1:
+            max_1=v     
+    else:
+        for j in range(m):
+            a=lst2[j]-x[j][i]#判断第i个物品是否满足约束条件
+            if a<0:
+                s=0
+                break
+        if s==1:
+            v=v+ls[i]#存放物品之后，获得它的价值
+            for k in range(m):#循环m次，有多少个约束条件就循环多少次
+                lst2[k]=lst2[k]-x[k][i]#存放已有的物品进去之后，得减掉它的容量
+            f(i+1)#判断接下来的物品是否满足条件
+            v=v-ls[i]#已经到达叶子节点之后，回溯，
+            for h in range(m):#循环m次，有多少个约束条件就循环多少次
+                lst2[h]=lst2[h]+x[h][i]#拿出已经存放的物品之后，得加上它原来容量
+        f(i+1)
+max_1=0.0
+v=0.0
+f(0)
+print("最优解为：%f"%max_1)
